@@ -52,4 +52,23 @@ object MyMonad extends App {
 
   println(getPairs(numberList, charList))
   println(getPairs(numberOption, charOption))
+
+  // extension methods - pure, flatmap
+  import cats.syntax.applicative._ // pure
+  val oneOption: Option[Int] = 1.pure[Option]
+  val oneList = 1.pure[List]
+
+
+  def getPairs2[M[_], A, B](group1: M[A], group2: M[B])(implicit monad: Monad[M]): M[(A, B)] = {
+    import cats.syntax.flatMap._
+    import cats.syntax.functor._
+
+    for {
+      a <- group1
+      b <- group2
+    } yield (a, b)
+  }
+
+  // Since monad extends from functor we get map and since it has flatmap we can use for yield
+
 }
