@@ -11,4 +11,12 @@ object MyApplicatives extends App {
     applicative.ap(inter)(fb)
   }
 
+  /*
+  * Functors (map)     SemiGroupal(product)    |     SemiGroup
+  *           Apply(ap)
+  *           Applicative (pure)               |      Monoid
+  *           Monad (flatMap)                  |
+  *
+  * */
+
 }
