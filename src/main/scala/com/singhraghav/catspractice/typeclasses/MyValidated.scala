@@ -1,4 +1,4 @@
-package com.singhraghav.catspractice
+package com.singhraghav.catspractice.typeclasses
 
 object MyValidated extends App {
   import cats.data.Validated

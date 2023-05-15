@@ -1,8 +1,7 @@
-package com.singhraghav.catspractice
+package com.singhraghav.catspractice.typeclasses
 
 object TCVariance extends App {
 
-  import cats.Eq
   import cats.instances.int._
   import cats.instances.option._
   import cats.syntax.eq._

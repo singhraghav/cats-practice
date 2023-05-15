@@ -1,4 +1,4 @@
-package com.singhraghav.catspractice
+package com.singhraghav.catspractice.typeclasses
 
 import scala.annotation.tailrec
 
@@ -22,9 +22,9 @@ object CustomMonad extends App {
 
   val anInt: Identity[Int] = 42
 
+  import cats.syntax.applicative._
   import cats.syntax.flatMap._
   import cats.syntax.functor._
-  import cats.syntax.applicative._
 
   val result: Identity[(Int, Int)] = {
   for {

@@ -1,4 +1,4 @@
-package com.singhraghav.catspractice
+package com.singhraghav.catspractice.typeclasses
 
 import java.util.concurrent.Executors
 import scala.concurrent.duration.Duration
@@ -13,7 +13,6 @@ object MonadTransformers extends App {
 
   import cats.data.EitherT
   import cats.instances.future._
-  import cats.instances.either._
 
   type AsyncResponse[T] = EitherT[Future, String, T]
 

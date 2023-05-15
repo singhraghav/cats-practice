@@ -1,9 +1,9 @@
-package com.singhraghav.catspractice
+package com.singhraghav.catspractice.typeclasses
 
 object TCSemigroup extends App {
 
   import cats.Semigroup
-  import  cats.syntax.semigroup._
+  import cats.syntax.semigroup._
   def reduceThings[T : Semigroup](things: List[T]): T = things.reduce(_ |+| _)
   case class Expense(id: Long, amount: Double)
 

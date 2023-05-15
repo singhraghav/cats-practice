@@ -1,4 +1,4 @@
-package com.singhraghav.catspractice
+package com.singhraghav.catspractice.typeclasses
 
 import cats.syntax.flatMap._
 import cats.syntax.functor._
@@ -6,7 +6,6 @@ import cats.syntax.functor._
 object MonadPractice extends App {
 
   import cats.Monad
-
   import cats.instances.either._
 
   type ErrorOr[T] = Either[String, T]

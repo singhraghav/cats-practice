@@ -1,4 +1,4 @@
-package com.singhraghav.catspractice
+package com.singhraghav.catspractice.typeclasses
 
 import cats.Monad
 

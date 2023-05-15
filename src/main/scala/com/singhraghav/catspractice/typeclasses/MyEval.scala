@@ -1,6 +1,4 @@
-package com.singhraghav.catspractice
-
-import scala.:+
+package com.singhraghav.catspractice.typeclasses
 
 object MyEval extends App {
 

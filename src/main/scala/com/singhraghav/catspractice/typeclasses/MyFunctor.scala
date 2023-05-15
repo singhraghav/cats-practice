@@ -1,4 +1,5 @@
-package com.singhraghav.catspractice
+package com.singhraghav.catspractice.typeclasses
+
 import cats.Functor
 object MyFunctor extends App {
 

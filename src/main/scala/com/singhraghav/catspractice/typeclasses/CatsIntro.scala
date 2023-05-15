@@ -1,5 +1,4 @@
-package com.singhraghav.catspractice
-
+package com.singhraghav.catspractice.typeclasses
 
 object CatsIntro extends App {
 

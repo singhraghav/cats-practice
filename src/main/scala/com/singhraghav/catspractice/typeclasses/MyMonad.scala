@@ -1,6 +1,4 @@
-package com.singhraghav.catspractice
-
-import cats.implicits.catsStdInstancesForFuture
+package com.singhraghav.catspractice.typeclasses
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration

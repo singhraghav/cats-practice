@@ -1,4 +1,4 @@
-package com.singhraghav.catspractice
+package com.singhraghav.catspractice.typeclasses
 
 import cats.Monoid
 import cats.implicits.catsSyntaxSemigroup
@@ -13,7 +13,6 @@ object MyFoldable extends App {
   }
 
   import cats.Foldable
-
   import cats.instances.list._
 
   Foldable[List]
