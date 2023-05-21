@@ -9,4 +9,6 @@ lazy val root = (project in file("."))
 
 libraryDependencies += "org.typelevel" %% "cats-core" % "2.9.0"
 libraryDependencies += "org.typelevel" %% "cats-effect" % "3.5.0"
+libraryDependencies += "dev.zio" %% "zio" % "2.0.13"
+
 
