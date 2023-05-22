@@ -1,6 +1,6 @@
 package com.singhraghav.catspractice.effects
 
-import cats.effect.IO
+import cats.effect.{ExitCode, IO, IOApp}
 import cats.effect.unsafe.implicits.global
 
 object InbuiltIO extends App {
@@ -38,4 +38,9 @@ object InbuiltIO extends App {
 
   println(delayedComputation2.unsafeRunSync())
   println(sumIo(20000).unsafeRunSync())
+}
+
+object FirstCatsEffectApp extends IOApp {
+  val app = IO(println("app"))
+  override def run(args: List[String]): IO[ExitCode] = app.as(ExitCode.Success)
 }
