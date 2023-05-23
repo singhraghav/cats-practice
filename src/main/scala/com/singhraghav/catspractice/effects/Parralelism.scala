@@ -21,6 +21,7 @@ object Parralelism extends IOApp.Simple {
 
   import cats.syntax.parallel._
   val combineEffect3 = (sequentialEffect1.myDebug, sequentialEffect2.myDebug).parMapN((e1, e2) => e1 + " " + e2)
+
   override def run: IO[Unit] = combineEffect3.myDebug.map(println)
 
   val anisIO = IO(println)
