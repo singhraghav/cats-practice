@@ -1,6 +1,6 @@
 package com.singhraghav.catspractice.effects
 
-import cats.effect.{IO, IOApp}
+import cats.effect.{IO, IOApp, Resource}
 import com.singhraghav.catspractice.effects.utils.IODebug
 
 import java.io.{File, FileReader}
@@ -39,11 +39,23 @@ object MyResources extends IOApp.Simple {
 
   def openFile(path: String): IO[Scanner] = IO(new Scanner(new FileReader(new File(path))))
 
+  def readingPrintingAndSleeping(scanner: Scanner): IO[Unit] =
+    if (scanner.hasNextLine) IO(scanner.nextLine()).myDebug >> IO.sleep(100.millis) >> readingPrintingAndSleeping(scanner)
+    else IO.unit
   def bracketReadFile(path: String): IO[Unit] = openFile(path).bracket { scanner =>
-    def readingPrintingAndSleeping(): IO[Unit] =
-      if (scanner.hasNextLine) IO(scanner.nextLine()).myDebug >> IO.sleep(100.millis) >> readingPrintingAndSleeping()
-      else IO.unit
-    readingPrintingAndSleeping()
+    readingPrintingAndSleeping(scanner)
   }( scanner => IO(println(s"closing file at path $path")).myDebug *> IO(scanner.close()))
-  override def run: IO[Unit] = bracketReadFile("src/main/resources/example.txt").void
+
+  val connectionResource = Resource.make(IO(new Connection("google.com")))(conn => conn.close.void)
+
+  val resourceFetchUrl = for {
+    fib <- connectionResource.use(con => con.open >> IO.never).start
+    _ <- IO.sleep(1.second) >> fib.cancel
+  } yield ()
+
+  def openFileResource(path: String): Resource[IO, Scanner] = Resource.make(openFile(path))(scanner => IO(scanner.close()))
+
+  val readFileWIthResource: String => IO[Unit] = string =>
+    openFileResource(string).use(scanner => readingPrintingAndSleeping(scanner))
+  override def run: IO[Unit] = readFileWIthResource("src/main/resources/example.txt")
 }
