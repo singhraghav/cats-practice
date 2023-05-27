@@ -106,5 +106,7 @@ object ZioBasic extends ZIOAppDefault {
   } yield input).repeatUntil(acceptInput)
 
   override def run: ZIO[Any with ZIOAppArgs with Scope, Any, Any] = readUntil(str => str.equals("raghav"))
+
+  // page number 60
 }
 
