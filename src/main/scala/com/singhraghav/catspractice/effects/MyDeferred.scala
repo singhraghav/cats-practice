@@ -79,5 +79,32 @@ object MyDeferred extends IOApp.Simple {
       _ <- fileDownloader.join
     } yield ()
   }
-  override def run: IO[Unit] = fileNotifierWithDeferred()
+
+
+  def pureAlarm() = {
+    def alarmCounter(signal: Deferred[IO, Unit], counter: Ref[IO, Int]): IO[Unit] = {
+      for {
+        _ <- IO.sleep(1.second)
+        counterValue <- counter.updateAndGet(_ + 1)
+        _ <- IO(s"[counter] incremented counter to $counterValue").myDebug
+        _ <- if(counterValue == 10) IO("[counter] completed count to 10").myDebug >> signal.complete(()) else IO.defer(alarmCounter(signal, counter))
+      } yield ()
+    }
+
+    def alarmSinger(signal: Deferred[IO, Unit]): IO[Unit] = for {
+      _ <- IO("[alarm] waiting for counter to complete").myDebug
+      _ <- signal.get
+      _ <- IO("time's up").myDebug
+    } yield ()
+
+    for {
+      counter <- Ref.of[IO, Int](0)
+      signal  <- Deferred[IO, Unit]
+      singerFib <- alarmSinger(signal).start
+      counterFib <- alarmCounter(signal, counter).start
+      _          <- singerFib.join
+      _          <- counterFib.join
+    } yield ()
+  }
+  override def run: IO[Unit] = pureAlarm()
 }
