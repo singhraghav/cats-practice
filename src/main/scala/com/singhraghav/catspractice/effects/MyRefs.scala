@@ -3,6 +3,8 @@ package com.singhraghav.catspractice.effects
 import cats.effect.{IO, IOApp, Ref}
 import cats.effect.kernel.Outcome.{Canceled, Errored, Succeeded}
 
+import scala.concurrent.duration.DurationInt
+
 object MyRefs extends IOApp.Simple {
 
   import com.singhraghav.catspractice.effects.utils._
@@ -36,5 +38,28 @@ object MyRefs extends IOApp.Simple {
       _ <- List("I love cats effect", "this ref is useless", "I write a lot of code").map(str => task(str, initialRef)).parSequence
     } yield ()
   }
-  override def run: IO[Unit] = demoConcurrentWorkPure()
+
+  def tickingClockPure(): IO[Unit] = {
+    import cats.syntax.parallel._
+    def tickingClock(ref: Ref[IO, Long]): IO[Unit] =
+      for {
+        _ <- IO.sleep(1.second)
+        _ <- IO(System.currentTimeMillis()).myDebug
+        _ <- ref.update( _ + 1)
+        _ <- IO.defer(tickingClock(ref))
+      } yield ()
+
+    def printTicks(ref: Ref[IO, Long]): IO[Unit] =
+      for {
+        _  <- IO.sleep(5.second)
+        _  <- ref.modify(ticks => (ticks, println(s"Ticks: $ticks")))
+        _  <- IO.defer(printTicks(ref))
+      }  yield ()
+
+    for {
+      ref <- IO.ref(0L)
+      _ <- (tickingClock(ref), printTicks(ref)).parTupled
+    } yield ()
+  }
+  override def run: IO[Unit] = tickingClockPure()
 }
