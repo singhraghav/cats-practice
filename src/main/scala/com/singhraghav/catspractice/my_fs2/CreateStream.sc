@@ -31,7 +31,11 @@ letterIter.toList
 
 letterIter2.toList
 
+val nats = Stream.iterate(1)(_ + 1)
 
+val oddNumStream = nats.map(n => 2* n - 1)
+
+oddNumStream.take(10).toList
 
 
 
