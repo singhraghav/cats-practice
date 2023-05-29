@@ -23,27 +23,35 @@ object MyMutex {
   val unlocked = State(locked = false, Queue())
 
   def createSignal: IO[Deferred[IO, Unit]] = Deferred[IO, Unit]
-  def create: IO[MyMutex] = Ref[IO].of(unlocked).map { state =>
-    new MyMutex {
-      override def acquire: IO[Unit] = createSignal.flatMap{ signal =>
+
+  def create: IO[MyMutex] = Ref[IO].of(unlocked).map(createMutexWithCancellation)
+
+  def createMutexWithCancellation(state: Ref[IO, State]): MyMutex = new MyMutex {
+    override def acquire: IO[Unit] = IO.uncancelable { poll =>
+      createSignal.flatMap { signal =>
+        val cleanup = state.modify {
+          case State(locked, waitingQueue) =>
+            val newQueue = waitingQueue.filterNot(_ eq signal)
+            (State(locked, newQueue), release)
+        }.flatten
+
         state.modify {
           case State(false, _) => (State(locked = true, Queue()), IO.unit)
-          case State(true, waitingQueue) => (State(locked = true, waitingQueue = waitingQueue.enqueue(signal)), signal.get)
+          case State(true, waitingQueue) => (State(locked = true, waitingQueue = waitingQueue.enqueue(signal)), poll(signal.get).onCancel(cleanup))
         }.flatten
       }
+    }
 
-      override def release: IO[Unit] = state.modify {
-        case State(false, _) => (unlocked, IO.unit)
-        case State(true, queue) =>
+    override def release: IO[Unit] = state.modify {
+      case State(false, _) => (unlocked, IO.unit)
+      case State(true, queue) =>
         if (queue.isEmpty) (unlocked, IO.unit)
         else {
           val (signal, rest) = queue.dequeue
           (State(locked = true, rest), signal.complete(()).void)
         }
-      }.flatten
-    }
+    }.flatten
   }
-
 }
 
 object MutexPlayground extends IOApp.Simple {
