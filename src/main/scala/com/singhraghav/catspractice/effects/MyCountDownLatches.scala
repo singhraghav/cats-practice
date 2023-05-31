@@ -7,7 +7,6 @@ import scala.concurrent.duration._
 import com.singhraghav.catspractice.effects.utils._
 import cats.syntax.parallel._
 object MyCountDownLatches extends IOApp.Simple {
-
   def trigger(latch: CountDownLatch[IO]): IO[Unit] = for {
     _ <- IO("starting race shortly").myDebug >> IO.sleep(2.seconds)
     _ <- IO("5....").myDebug >> IO.sleep(1.seconds)
