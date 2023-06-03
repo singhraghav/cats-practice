@@ -25,6 +25,8 @@ libraryDependencies ++= Seq(
   // Optional for string interpolation to JSON model
   "io.circe" %% "circe-literal" % "0.14.5"
 )
+libraryDependencies += "eu.timepit" %% "refined" % "0.10.3"
+
 //
 //val circeVersion = "0.14.1"
 //

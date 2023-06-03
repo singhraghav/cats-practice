@@ -53,9 +53,9 @@ object PolyMorphicMonadCancel extends IOApp.Simple {
 
   val authProgram2 = for {
     authFib <- authFlowGeneralized[IO, Throwable].start
-    _ <- IO.sleep(2.second) >> IO("Auth time out, cancelling ...").myDebug >> authFib.cancel
+    _ <- IO.sleep(6.second) >> IO("Auth time out, cancelling ...").myDebug >> authFib.cancel
     _ <- authFib.join
   } yield ()
 
-  override def run: IO[Unit] = authProgram
+  override def run: IO[Unit] = authProgram2
 }
