@@ -4,12 +4,15 @@ import cats.effect._
 import com.comcast.ip4s.IpLiteralSyntax
 import org.http4s._
 import org.http4s.dsl.io._
+import org.http4s.implicits._
 import org.http4s.ember.server.EmberServerBuilder
 import org.http4s.server.{Router, Server}
 object MyFirstRoutes extends IOApp.Simple {
 
   private val helloWorldRoutes = HttpRoutes.of[IO] {
-    case GET -> Root / "hello" / name => Ok(s"Hello, $name")
+    case GET ->  "hello" /: name => Ok(s"Hello, $name")
+    case GET ->  Root / "roll-num" / IntVar(rollNum) => Ok(s"Hello, $rollNum")
+    case GET -> Root / file ~ "json" => Ok(s"""{"response": "You asked for $file"}""")
   }
 
   private val app = Router("/" -> helloWorldRoutes).orNotFound
