@@ -20,5 +20,14 @@ object Basics extends IOApp.Simple {
   }
 
   val collectAllEquivalent: IO[List[Any]] = List(goingShopping, firstName, lastName).sequence
+
+  def getUserByIdAsync(id: Int)(cb: Option[String] => Unit): Unit = ???
+
+  def getUserByIdAsyncIO(id: Int) = IO.async_ { cb: (Either[Throwable, String] => Unit) =>
+    getUserByIdAsync(id){
+      case Some(value) => cb(Right(value))
+      case None => cb(Right("no user found"))
+    }
+  }
   override def run: IO[Unit] = goShoppingLater
 }

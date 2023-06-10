@@ -17,5 +17,9 @@ object Basics extends ZIOAppDefault {
 
   val collectionResult: ZIO[Any, Throwable, List[Any]] =
     ZIO.collectAll(List(goShopping, firstName, lastName))
+
+  def getUserByIdAsync(id: Int)(cb: Option[String] => Unit): Unit = ???
+
+
   override def run: ZIO[Any with ZIOAppArgs with Scope, Any, Any] = goShoppingLater
 }
