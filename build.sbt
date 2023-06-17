@@ -23,9 +23,14 @@ libraryDependencies ++= Seq(
   // Optional for auto-derivation of JSON codecs
   "io.circe" %% "circe-generic" % "0.14.5",
   // Optional for string interpolation to JSON model
-  "io.circe" %% "circe-literal" % "0.14.5"
+  "io.circe" %% "circe-literal" % "0.14.5",
+  "dev.profunktor" %% "http4s-jwt-auth" % "1.2.0",
+  "com.github.jwt-scala" %% "jwt-core" % "9.3.0",
+  "com.github.jwt-scala" %% "jwt-circe" % "9.3.0"
+
 )
 libraryDependencies += "eu.timepit" %% "refined" % "0.10.3"
+
 
 //
 //val circeVersion = "0.14.1"
