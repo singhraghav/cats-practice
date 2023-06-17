@@ -12,7 +12,7 @@ import org.http4s.headers.Authorization
 
 case class User(id: Long, name: String)
 
-object MyAuth extends IOApp.Simple {
+object BasicAuthDemo extends IOApp.Simple {
 
   private val routes: HttpRoutes[IO] =
     HttpRoutes.of[IO] {
@@ -60,7 +60,6 @@ object MyAuth extends IOApp.Simple {
       .withPort(port"8081")
       .withHttpApp(userBasicAuthMiddleware(basicAuthedRoutes).orNotFound)
       .build
-
 
   override def run: IO[Unit] = basicAuthedServer.use(_ => IO.never).void
 
